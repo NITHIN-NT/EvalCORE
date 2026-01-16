@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; border: 1px solid #ddd; padding: 0; }
+        .header { background-color: #DA0000; color: #fff; padding: 20px; text-align: center; }
+        .content { padding: 30px; }
+        .reason-box { background-color: #fff5f5; border-left: 5px solid #DA0000; padding: 15px; margin: 20px 0; color: #c53030; }
+        .footer { background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 0.8rem; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin:0;">Registration Update</h1>
+        </div>
+        <div class="content">
+            <p>Dear <strong>{{ user.get_full_name }}</strong>,</p>
+            <p>We regret to inform you that your registration for <strong>{{ exam.name }}</strong> has been rejected after review.</p>
+            
+            <div class="reason-box">
+                <strong>Reason for Rejection:</strong><br>
+                {{ reason|default:"Incomplete documentation or eligibility criteria not met." }}
+            </div>
+
+            <p>If you believe this is a mistake, please contact our support desk or re-apply with the correct information.</p>
+        </div>
+        <div class="footer">
+            &copy; 2026 Student Portal System.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Failed - Student Portal{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 4rem auto; text-align: center;">
+    <div class="card" style="padding: 3rem; border-top: 5px solid #dc3545;">
+        <div style="width: 80px; height: 80px; background: #f8d7da; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#721c24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </div>
+        
+        <h1 style="color: #721c24; margin-bottom: 1rem;">Payment Failed</h1>
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">
+            We couldn't process your payment for <strong>{{ registration.exam.name }}</strong>. Don't worry, your registration details are saved.
+        </p>
+        
+        <div style="background: #fff5f5; border-radius: 8px; padding: 1.5rem; text-align: center; margin-bottom: 2.5rem; border: 1px solid #feb2b2;">
+            <p style="margin: 0; color: #c53030; font-weight: bold;">
+                Transaction was not completed.
+            </p>
+            <p style="margin: 0.5rem 0 0; font-size: 0.9rem; color: #742a2a;">
+                If your money was deducted, it will be refunded automatically within 5-7 working days.
+            </p>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-direction: column;">
+            <a href="{% url 'registrations:register_exam' registration.exam.id %}" class="btn btn-primary" style="padding: 1rem 2rem; font-weight: bold; font-size: 1.1rem;">
+                Try Payment Again
+            </a>
+            <a href="{% url 'exam_list' %}" class="btn btn-outline" style="padding:0.75rem 2rem;">
+                Back to Exams
+            </a>
+        </div>
+        
+        <p style="margin-top: 2rem; color: #999; font-size: 0.9rem;">
+            If you continue to face issues, please contact our support team at <a href="mailto:support@edu-portal.com" style="color: #DA0000; text-decoration: none;">support@edu-portal.com</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

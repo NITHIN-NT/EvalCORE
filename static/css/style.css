@@ -1,0 +1,348 @@
+:root {
+    --primary-red: #DA0000;
+    --black: #000000;
+    --white: #FFFFFF;
+    --dark-gray: #574D4C;
+    --deep-maroon: #830F10;
+    --light-gray: #f4f4f4;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--light-gray);
+    color: var(--black);
+    line-height: 1.6;
+}
+
+/* Navigation */
+nav {
+    background-color: var(--black);
+    color: var(--white);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-red);
+    text-decoration: none;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 2rem;
+}
+
+nav ul li a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+nav ul li a:hover {
+    color: var(--primary-red);
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--white);
+    transition: var(--transition);
+}
+
+/* Containers */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Cards */
+.card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.exam-card {
+    transition: var(--transition);
+    border-bottom: 4px solid transparent;
+}
+
+.exam-card:hover {
+    transform: translateY(-5px);
+    border-bottom: 4px solid var(--primary-red);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-red);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--deep-maroon);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-red);
+    border: 2px solid var(--primary-red);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-red);
+    color: var(--white);
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--dark-gray);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="datetime-local"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 2px rgba(218, 0, 0, 0.1);
+}
+
+/* Toasts */
+#toast-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+}
+
+.toast {
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    color: white;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.error {
+    background-color: var(--primary-red);
+}
+
+.toast.warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Dashboard Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+    margin-bottom: 1.5rem;
+    color: var(--black);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--dark-gray);
+    margin-top: 4rem;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+
+    /* DEBUG: border to verify media query is active */
+    body {
+        border-top: 10px solid var(--primary-red) !important;
+    }
+
+    nav {
+        padding: 1rem !important;
+    }
+
+    .menu-toggle,
+    #menu-toggle {
+        display: none !important;
+    }
+
+    .hamburger,
+    #hamburger-label {
+        display: flex !important;
+        position: relative !important;
+        z-index: 1001 !important;
+        width: 30px !important;
+        height: 24px !important;
+    }
+
+    nav ul,
+    #nav-list {
+        position: fixed !important;
+        top: 0 !important;
+        left: -100% !important;
+        width: 100% !important;
+        height: 100vh !important;
+        background-color: var(--black) !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: left 0.3s ease !important;
+        z-index: 1000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+    }
+
+    nav ul li {
+        margin: 1.5rem 0 !important;
+        margin-left: 0 !important;
+    }
+
+    #menu-toggle:checked~#nav-list {
+        left: 0 !important;
+    }
+
+    #menu-toggle:checked~#hamburger-label span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px) !important;
+    }
+
+    #menu-toggle:checked~#hamburger-label span:nth-child(2) {
+        opacity: 0 !important;
+    }
+
+    #menu-toggle:checked~#hamburger-label span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px) !important;
+    }
+
+    .grid {
+        grid-template-columns: 1fr !important;
+        display: grid !important;
+    }
+
+    .container {
+        margin: 1rem auto !important;
+        padding: 0 1rem !important;
+    }
+
+    .card {
+        padding: 1rem !important;
+    }
+
+    #toast-container {
+        left: 1rem !important;
+        right: 1rem !important;
+        bottom: 1rem !important;
+    }
+
+    .toast {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+}

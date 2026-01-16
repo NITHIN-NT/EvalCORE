@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - {{ exam.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; text-align: center;">
+    <div class="card">
+        <h2>Complete Your Registration</h2>
+        <p style="margin-bottom: 2rem; color: var(--dark-gray);">
+            You are registering for <strong>{{ exam.name }}</strong>.<br>
+            Please complete the payment of <strong>₹{{ exam.fees }}</strong> to confirm your slot.
+        </p>
+
+        <button id="rzp-button1" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+            Pay Now (₹{{ exam.fees }})
+        </button>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ order.amount }}",
+    "currency": "INR",
+    "name": "EDU-PORTAL",
+    "description": "Exam Registration Fee for {{ exam.name }}",
+    "order_id": "{{ order.id }}",
+    "callback_url": "{{ request.scheme }}://{{ request.get_host }}{% url 'registrations:payment_callback' %}?registration_id={{ registration.id }}",
+    "prefill": {
+        "name": "{{ request.user.first_name }} {{ request.user.last_name }}",
+        "email": "{{ request.user.email }}"
+    },
+    "theme": {
+        "color": "#DA0000"
+    },
+    "modal": {
+        "ondismiss": function() {
+            window.location.href = "{% url 'registrations:payment_failure' registration.id %}";
+        }
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+    window.location.href = "{% url 'registrations:payment_failure' registration.id %}";
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+{% endblock %}

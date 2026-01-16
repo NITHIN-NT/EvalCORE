@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful - Student Portal{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 4rem auto; text-align: center;">
+    <div class="card" style="padding: 3rem; border-top: 5px solid #28a745;">
+        <div style="width: 80px; height: 80px; background: #d4edda; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#155724" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        
+        <h1 style="color: #155724; margin-bottom: 1rem;">Registration Confirmed!</h1>
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">
+            Thank you, <strong>{{ user.first_name }}</strong>. Your payment for <strong>{{ registration.exam.name }}</strong> has been processed successfully.
+        </p>
+        
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 1.5rem; text-align: left; margin-bottom: 2.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span style="color: #888;">Exam Name:</span>
+                <span style="font-weight: bold;">{{ registration.exam.name }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span style="color: #888;">Amount Paid:</span>
+                <span style="font-weight: bold;">₹{{ registration.exam.fees }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <span style="color: #888;">Payment ID:</span>
+                <span style="font-family: monospace;">{{ registration.razorpay_payment_id }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: #888;">Status:</span>
+                <span style="color: #28a745; font-weight: bold;">Paid</span>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <a href="{% url 'profile' %}" class="btn btn-primary" style="padding: 0.75rem 2rem;">Go to Profile</a>
+            <a href="{% url 'exam_list' %}" class="btn btn-outline" style="padding: 0.75rem 2rem;">Back to Exams</a>
+        </div>
+        
+        <p style="margin-top: 2rem; color: #999; font-size: 0.9rem;">
+            A confirmation email will be sent to <strong>{{ user.email }}</strong> shortly.
+            <br>Hall tickets will be issued after document verification.
+        </p>
+    </div>
+</div>
+{% endblock %}

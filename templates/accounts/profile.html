@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - {{ user.get_full_name|default:user.email }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <!-- Profile Header -->
+        <div style="background-color: var(--black); padding: 3rem 2rem; text-align: center; color: var(--white); border-bottom: 5px solid var(--primary-red);">
+            <div style="width: 100px; height: 100px; background-color: var(--white); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; border: 4px solid var(--primary-red);">
+                <span style="font-size: 3rem; font-weight: bold; color: var(--black);">{{ user.first_name|first|default:user.email|first|upper }}</span>
+            </div>
+            <h1 style="color: var(--white); margin: 0;">{{ user.get_full_name|default:"Student" }}</h1>
+            <p style="color: var(--primary-red); font-weight: bold; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 2px;">
+                {% if user.is_staff %}ADMINISTRATOR{% else %}STUDENT{% endif %}
+            </p>
+        </div>
+
+        <!-- Profile Details -->
+        <div style="padding: 2.5rem;">
+            <div class="grid" style="gap: 2rem;">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <p style="padding: 0.75rem; background: var(--light-gray); border-radius: 4px;">{{ user.first_name|default:"Not set" }}</p>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <p style="padding: 0.75rem; background: var(--light-gray); border-radius: 4px;">{{ user.last_name|default:"Not set" }}</p>
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Email Address</label>
+                    <p style="padding: 0.75rem; background: var(--light-gray); border-radius: 4px;">{{ user.email }}</p>
+                </div>
+                <div class="form-group">
+                    <label>Verification Status</label>
+                    <p style="padding: 0.75rem; background: {% if user.is_verified %}#d4edda{% else %}#f8d7da{% endif %}; color: {% if user.is_verified %}#155724{% else %}#721c24{% endif %}; border-radius: 4px; font-weight: bold;">
+                        {% if user.is_verified %}Verified Account{% else %}Unverified{% endif %}
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label>Member Since</label>
+                    <p style="padding: 0.75rem; background: var(--light-gray); border-radius: 4px;">{{ user.date_joined|date:"F Y" }}</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="margin-top: 3rem; display: flex; gap: 1rem; border-top: 1px solid #eee; padding-top: 2rem; margin-bottom: 2rem;">
+                {% if user.is_staff %}
+                    <a href="{% url 'admin_panel:dashboard' %}" class="btn btn-outline" style="flex: 1; text-align: center;">Go to Admin Panel</a>
+                {% endif %}
+                
+                <a href="{% url 'logout' %}" class="btn btn-primary" style="flex: 1; text-align: center; background-color: var(--black);">
+                    Logout from Session
+                </a>
+            </div>
+
+            {% if not user.is_staff %}
+            <div style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem; border-bottom: 2px solid var(--light-gray); padding-bottom: 0.5rem;">My Registered Exams</h3>
+                <div class="table-responsive">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--light-gray); text-align: left;">
+                                <th style="padding: 1rem 0.5rem;">Exam Name</th>
+                                <th style="padding: 1rem 0.5rem;">Exam Date</th>
+                                <th style="padding: 1rem 0.5rem;">Status</th>
+                                <th style="padding: 1rem 0.5rem;">Payment</th>
+                                <th style="padding: 1rem 0.5rem;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reg in registrations %}
+                            <tr style="border-bottom: 1px solid var(--light-gray);">
+                                <td style="padding: 1rem 0.5rem; font-weight: bold;">{{ reg.exam.name }}</td>
+                                <td style="padding: 1rem 0.5rem;">{{ reg.exam.exam_date|date:"M j, Y" }}</td>
+                                <td style="padding: 1rem 0.5rem;">
+                                    <span style="padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: bold; 
+                                            {% if reg.status == 'Approved' %} background: #d4edda; color: #155724; 
+                                            {% elif reg.status == 'Rejected' %} background: #f8d7da; color: #721c24; 
+                                            {% elif reg.status == 'Hold' %} background: #fff3cd; color: #856404; 
+                                            {% else %} background: #e9ecef; color: #495057; {% endif %}">
+                                        {{ reg.status }}
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem 0.5rem;">
+                                    <span style="font-weight: bold; font-size: 0.8rem; color: {% if reg.payment_status == 'Success' %}#28a745{% else %}#DA0000{% endif %};">
+                                        {{ reg.payment_status }}
+                                    </span>
+                                </td>
+                                <td style="padding: 1rem 0.5rem; display: flex; gap: 0.5rem; align-items: center;">
+                                    {% if reg.document %}
+                                    <a href="{{ reg.document.url }}" target="_blank" style="color: var(--primary-red); text-decoration: none; font-size: 0.8rem; font-weight: bold; border: 1px solid var(--primary-red); padding: 0.2rem 0.4rem; border-radius: 4px;">Doc</a>
+                                    {% else %}
+                                    <span style="color: #999; font-size: 0.75rem; font-style: italic;">No Doc</span>
+                                    {% endif %}
+                                    {% if reg.status == 'Approved' %}
+                                    <a href="{% url 'registrations:view_hall_ticket' reg.id %}" target="_blank" style="color: #fff; background-color: var(--black); text-decoration: none; font-size: 0.8rem; font-weight: bold; padding: 0.2rem 0.4rem; border-radius: 4px;">Hall Ticket</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="padding: 2rem; text-align: center; color: var(--dark-gray);">
+                                    No registrations yet. <a href="{% url 'exam_list' %}" style="color: var(--primary-red);">Browse Exams</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Register for {{ exam.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    <div class="card">
+        <h2>Register for {{ exam.name }}</h2>
+        <div style="margin-bottom: 2rem; padding: 1rem; background: var(--light-gray); border-radius: 4px;">
+            <h3>Eligibility Criteria</h3>
+            <p>{{ exam.eligibility|linebreaks }}</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Student Email</label>
+                <input type="text" value="{{ user.email }}" disabled>
+            </div>
+            <div class="form-group">
+                <label for="id_document">Upload Required Document (PDF/Image)</label>
+                <input type="file" name="document" id="id_document" required>
+                <small style="display: block; margin-top: 0.5rem; color: var(--dark-gray);">Max size: 5MB. Formats: PDF,
+                    PNG, JPG.</small>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Registration</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

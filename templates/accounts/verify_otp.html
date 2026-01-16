@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Verify OTP - Student Portal{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="card">
+        <h2>Verify Email</h2>
+        <p style="margin-bottom: 1.5rem; color: var(--dark-gray);">
+            A 6-digit verification code has been sent to <strong>{{ user.email }}</strong>.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_otp_code">Enter 6-digit OTP</label>
+                <input type="text" name="otp_code" id="id_otp_code" maxlength="6" minlength="6" required
+                    style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Verify & Complete Registration</button>
+        </form>
+        
+        <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid #eee; padding-top: 1rem;">
+            <p id="resend-container" style="color: var(--dark-gray); font-size: 0.9rem;">
+                Didn't receive the code? 
+                <span id="timer-text">Wait <span id="timer">60</span>s to resend</span>
+                <a href="{% url 'resend_otp' %}" id="resend-link" style="display: none; color: var(--primary-color); font-weight: 600; text-decoration: none;">Resend OTP</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let timeLeft = 60;
+        const timerElement = document.getElementById('timer');
+        const timerText = document.getElementById('timer-text');
+        const resendLink = document.getElementById('resend-link');
+        
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerText.style.display = 'none';
+                resendLink.style.display = 'inline';
+            }
+        }, 1000);
+    });
+</script>
+{% endblock %}

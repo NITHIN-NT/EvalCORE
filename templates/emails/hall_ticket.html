@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; border: 2px solid #000; padding: 0; }
+        .header { background-color: #000; color: #fff; padding: 20px; text-align: center; }
+        .content { padding: 30px; }
+        .hall-ticket { border: 1px dashed #333; padding: 20px; margin-top: 20px; position: relative; }
+        .qr-code { float: right; margin-left: 20px; }
+        .details-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 20px; }
+        .label { font-weight: bold; color: #555; }
+        .footer { background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 0.8rem; color: #777; }
+        .status-badge { display: inline-block; padding: 5px 15px; background: #28a745; color: #fff; border-radius: 20px; font-weight: bold; }
+        .location-info { margin-top: 20px; padding: 15px; background: #eef; border-left: 5px solid #0000ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin:0;">OFFICIAL HALL TICKET</h1>
+            <p style="margin:5px 0 0 0;">Student Examination Portal</p>
+        </div>
+        <div class="content">
+            <p>Dear <strong>{{ user.get_full_name }}</strong>,</p>
+            <p>Congratulations! Your registration for <strong>{{ exam.name }}</strong> has been approved. Please find your official hall ticket details below.</p>
+            
+            <div class="hall-ticket">
+                <div class="qr-code">
+                    <img src="cid:qr_code" width="120" height="120" alt="QR Code">
+                </div>
+                
+                <h3 style="margin-top:0; color: #DA0000;">{{ exam.name }}</h3>
+                <div style="margin-bottom: 10px;">
+                    <span class="status-badge">APPROVED</span>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <p><strong>Registration No:</strong> <span style="font-size: 1.2rem; color: #000;">{{ registration.registration_number }}</span></p>
+                    <p><strong>Exam Date:</strong> {{ exam.exam_date|date:"F j, Y, g:i a" }}</p>
+                    <p><strong>Candidate:</strong> {{ user.get_full_name }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                </div>
+            </div>
+
+            <div class="location-info">
+                <strong>Exam Location:</strong><br>
+                {{ exam.location }}
+            </div>
+
+            <p style="margin-top: 30px; font-size: 0.9rem;">
+                <strong>Note:</strong> Please carry a printout of this email or your digital hall ticket along with a valid ID proof to the examination center. Arrive at least 30 minutes before the scheduled time.
+            </p>
+        </div>
+        <div class="footer">
+            &copy; 2026 Student Portal System. This is an automatically generated document.
+        </div>
+    </div>
+</body>
+</html>

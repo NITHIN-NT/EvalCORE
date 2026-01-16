@@ -1,0 +1,57 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Admin Profile - Staff Portal{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div class="card" style="padding: 0; overflow: hidden; border-top: 5px solid var(--admin-red);">
+        <!-- Profile Header -->
+        <div style="background-color: var(--admin-dark); padding: 3rem 2rem; text-align: center; color: white;">
+            <div style="width: 100px; height: 100px; background-color: white; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; border: 4px solid var(--admin-red);">
+                <span style="font-size: 3rem; font-weight: bold; color: var(--admin-dark);">{{ user.first_name|first|default:user.email|first|upper }}</span>
+            </div>
+            <h1 style="color: white; margin: 0;">{{ user.get_full_name|default:"Administrator" }}</h1>
+            <p style="color: var(--admin-red); font-weight: bold; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 2px;">
+                Staff Account
+            </p>
+        </div>
+
+        <!-- Profile Details -->
+        <div style="padding: 2.5rem;">
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div class="form-group">
+                    <label style="color: #666; font-size: 0.85rem;">First Name</label>
+                    <p style="padding: 0.75rem; background: var(--admin-gray); border-radius: 4px; border-left: 3px solid var(--admin-red);">{{ user.first_name|default:"Not set" }}</p>
+                </div>
+                <div class="form-group">
+                    <label style="color: #666; font-size: 0.85rem;">Last Name</label>
+                    <p style="padding: 0.75rem; background: var(--admin-gray); border-radius: 4px; border-left: 3px solid var(--admin-red);">{{ user.last_name|default:"Not set" }}</p>
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label style="color: #666; font-size: 0.85rem;">Administrator Email</label>
+                    <p style="padding: 0.75rem; background: var(--admin-gray); border-radius: 4px; border-left: 3px solid var(--admin-red);">{{ user.email }}</p>
+                </div>
+                <div class="form-group">
+                    <label style="color: #666; font-size: 0.85rem;">Access Level</label>
+                    <p style="padding: 0.75rem; background: #d4edda; color: #155724; border-radius: 4px; font-weight: bold;">
+                        Full Staff Privileges
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label style="color: #666; font-size: 0.85rem;">Member Since</label>
+                    <p style="padding: 0.75rem; background: var(--admin-gray); border-radius: 4px;">{{ user.date_joined|date:"F Y" }}</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="margin-top: 3rem; display: flex; gap: 1rem; border-top: 1px solid #eee; padding-top: 2rem;">
+                <a href="{% url 'admin_panel:dashboard' %}" class="btn btn-outline" style="flex: 1; text-align: center;">Back to Dashboard</a>
+                
+                <a href="{% url 'logout' %}" class="btn btn-primary" style="flex: 1; text-align: center; background-color: var(--admin-red); border: none;">
+                    Terminate Session
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

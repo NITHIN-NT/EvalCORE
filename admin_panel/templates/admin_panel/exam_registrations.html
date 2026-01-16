@@ -1,0 +1,91 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Manage Entres: {{ exam.name }} - Staff Portal{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+    <a href="{% url 'admin_panel:exam_list' %}" style="text-decoration: none; color: #666;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    </a>
+    <h1 style="margin: 0;">Entries: {{ exam.name }}</h1>
+</div>
+
+<!-- Bulk Actions -->
+<div class="card" style="margin-bottom: 2rem; background: #f8f9fa; border: 1px dashed #ccc;">
+    <h3 style="margin-bottom: 1rem; font-size: 1rem; color: #555;">Bulk Actions (Pending Only)</h3>
+    <div style="display: flex; gap: 1rem; align-items: flex-end;">
+        <div style="flex: 1;">
+            <label style="font-size: 0.8rem; color: #666; display: block; margin-bottom: 0.5rem;">Reason (Optional for Bulk)</label>
+            <input type="text" id="bulk_reason_input" placeholder="Note for bulk processing..." style="width: 100%; padding: 0.5rem;">
+        </div>
+        <form id="bulk-approve-form" action="{% url 'admin_panel:bulk_update_registrations' exam.id 'Approved' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="bulk_reason" class="bulk_reason_hidden">
+            <button type="button" onclick="submitBulk('bulk-approve-form')" class="btn btn-primary" style="background-color: #155724; border-color: #155724;">Approve All Pending</button>
+        </form>
+        <form id="bulk-reject-form" action="{% url 'admin_panel:bulk_update_registrations' exam.id 'Rejected' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="bulk_reason" class="bulk_reason_hidden">
+            <button type="button" onclick="submitBulk('bulk-reject-form')" class="btn btn-primary" style="background-color: #721c24; border-color: #721c24;">Reject All Pending</button>
+        </form>
+    </div>
+</div>
+
+<div class="card" style="padding: 0;">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: var(--admin-dark); color: white; text-align: left;">
+                <th style="padding: 1rem;">Student</th>
+                <th style="padding: 1rem;">Registered On</th>
+                <th style="padding: 1rem;">Payment</th>
+                <th style="padding: 1rem;">Status</th>
+                <th style="padding: 1rem;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg in registrations %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 1rem;">
+                    <strong>{{ reg.student.get_full_name }}</strong><br>
+                    <small style="color: #666;">{{ reg.student.email }}</small>
+                </td>
+                <td style="padding: 1rem;">{{ reg.registered_at|date:"M j, Y" }}</td>
+                <td style="padding: 1rem;">
+                    <span style="font-weight: bold; color: {% if reg.payment_status == 'Success' %}#28a745{% else %}#DA0000{% endif %};">
+                        {{ reg.payment_status }}
+                    </span>
+                </td>
+                <td style="padding: 1rem;">
+                    <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: bold; 
+                            {% if reg.status == 'Approved' %} background: #d4edda; color: #155724; 
+                            {% elif reg.status == 'Rejected' %} background: #f8d7da; color: #721c24; 
+                            {% elif reg.status == 'Hold' %} background: #fff3cd; color: #856404; 
+                            {% else %} background: #eee; color: #555; {% endif %}">
+                        {{ reg.status }}
+                    </span>
+                </td>
+                <td style="padding: 1rem;">
+                    <a href="{% url 'admin_panel:registration_detail' reg.id %}" class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="padding: 3rem; text-align: center; color: #999;">No registrations for this exam yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function submitBulk(formId) {
+    const reason = document.getElementById('bulk_reason_input').value;
+    document.querySelectorAll('.bulk_reason_hidden').forEach(input => {
+        input.value = reason;
+    });
+    if (confirm('Are you sure you want to process these registrations in bulk?')) {
+        document.getElementById(formId).submit();
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Exams - Student Portal{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>Available Exams</h1>
+</div>
+
+<div class="grid">
+    {% for exam in exams %}
+    <div class="card exam-card" style="display: flex; flex-direction: column; height: 100%; min-height: 450px;">
+        <div style="position: relative; overflow: hidden; border-radius: 8px; margin-bottom: 1rem; flex-shrink: 0;">
+            {% if exam.banner %}
+            <img src="{{ exam.banner.url }}" alt="{{ exam.name }}"
+                style="width: 100%; height: 180px; object-fit: cover; display: block;">
+            {% endif %}
+            
+            <div style="position: absolute; top: 12px; right: 12px; background: rgba(218, 0, 0, 0.9); color: white; padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);">
+                {% if exam.days_left == 0 %}
+                    Hurry! Exam Today
+                {% elif exam.days_left == 1 %}
+                    1 Day Left
+                {% else %}
+                    {{ exam.days_left }} Days Left
+                {% endif %}
+            </div>
+        </div>
+        
+        <h3 style="margin-top: 0; margin-bottom: 0.5rem; word-wrap: break-word;">{{ exam.name }}</h3>
+        
+        <p style="color: var(--dark-gray); margin-bottom: 1rem; font-size: 0.9rem; flex-grow: 1; overflow-wrap: break-word;">
+            {{ exam.description|truncatewords:20 }}
+        </p>
+
+        <div style="margin-bottom: 1.5rem; font-size: 0.9rem; color: #555; flex-shrink: 0;">
+            <p style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;"><strong style="color: #333; flex-shrink: 0;">Date:</strong> <span style="word-wrap: break-word;">{{ exam.exam_date|date:"F j, Y, g:i a" }}</span></p>
+            <p style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;"><strong style="color: #333; flex-shrink: 0;">Location:</strong> <span style="word-wrap: break-word;">{{ exam.location }}</span></p>
+            <p style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;"><strong style="color: #333; flex-shrink: 0;">Eligibility:</strong> <span style="word-wrap: break-word;">{{ exam.eligibility|truncatechars:50 }}</span></p>
+            <p style="margin-bottom: 0.8rem; font-size: 1.1rem; color: #DA0000;"><strong style="color: #333;">Fee:</strong> ₹{{ exam.fees }}</p>
+            <p><strong>Status:</strong>
+                {% if exam.is_registration_open %}
+                <span style="color: #28a745; font-weight: bold;">Open</span>
+                {% else %}
+                <span style="color: var(--primary-red); font-weight: bold;">Closed</span>
+                {% endif %}
+            </p>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-top: auto; flex-shrink: 0;">
+            {% if exam.user_registration %}
+                {% if exam.user_registration.status == 'Approved' %}
+                    <a href="{% url 'registrations:view_hall_ticket' exam.user_registration.id %}" target="_blank" 
+                       class="btn btn-primary" style="width: 100%; text-align: center; font-weight: bold; background: #28a745; border-color: #28a745;">
+                        Download Hall Ticket
+                    </a>
+                {% elif exam.user_registration.status == 'Rejected' %}
+                    <a href="{% url 'registrations:register_exam' exam.id %}" class="btn btn-primary"
+                        style="width: 100%; text-align: center; font-weight: bold;">Re-apply Now</a>
+                {% elif exam.user_registration.status == 'Hold' %}
+                    <div style="width: 100%; text-align: center; padding: 0.75rem; background: #fff3cd; color: #856404; border-radius: 4px; font-weight: bold; border: 1px solid #ffeeba; font-size: 0.9rem;">
+                        Application on Hold
+                    </div>
+                {% else %}
+                    <div style="width: 100%; text-align: center; padding: 0.75rem; background: #e2e3e5; color: #383d41; border-radius: 4px; font-weight: bold; border: 1px solid #d6d8db; font-size: 0.9rem;">
+                        Review in Progress
+                    </div>
+                {% endif %}
+            {% elif exam.is_registration_open %}
+                <a href="{% url 'registrations:register_exam' exam.id %}" class="btn btn-primary"
+                    style="width: 100%; text-align: center; font-weight: bold;">Register Now</a>
+            {% else %}
+                <button class="btn btn-primary" style="width: 100%; opacity: 0.5; cursor: not-allowed;"
+                    disabled>Registration Closed</button>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p>No exams available at the moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}
